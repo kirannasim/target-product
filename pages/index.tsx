@@ -12,6 +12,7 @@ export default function Home() {
     products:[],
     loading: false
   });
+  const [store_id, setStore_id] = useState('1122')
 
   const handleKeyword = (e: any) => {
     setKeyword(e.target.value);
@@ -23,7 +24,7 @@ export default function Home() {
       method: 'GET',
       url: 'https://target-com-shopping-api.p.rapidapi.com/product_search',
       params: {
-        store_id: '1122',
+        store_id: store_id,
         keyword: keyword,
         offset: '0',
         count: '9'
@@ -83,7 +84,7 @@ export default function Home() {
               <Link key={index} className="mb-3"
                 href={{
                   pathname: '/product-detail',
-                  query: p
+                  query: {tcin: p.tcin, store_id: store_id}
                 }}
               >
                 <img src={ p.item.enrichment.images.primary_image_url } alt={p.item.product_vendors[0].vendor_name} />
