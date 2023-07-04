@@ -12,9 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
     loading: false
   });
   const router = useRouter();
-  console.log(router)
   const query = router.query;
-  console.log(query)
   useEffect(() => {
     const options = {
       method: 'GET',
@@ -81,7 +79,6 @@ import "react-toastify/dist/ReactToastify.css";
     <div className="container mx-auto">
       {(product.product.tcin !== null && product.product.tcin !== undefined) &&
       <>
-      {console.log('----------------')}
         <Carousel
           swipeable={false}
           draggable={false}

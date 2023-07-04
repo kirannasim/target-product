@@ -79,7 +79,7 @@ export default function Home() {
         {(products.products && products.products.length > 0) && 
         <>
           <h1>Search Result</h1>
-          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3">
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-4">
             {products.products.map((p: any, index: number) => 
               <Link key={index} className="mb-3"
                 href={{

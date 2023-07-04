@@ -19,6 +19,9 @@
 :focus-visible {
   outline: none !important;
 }
+div>a>img {
+  width: 100%;
+}
 /* start product-detail */
 .detail-info {
   text-transform: capitalize;
