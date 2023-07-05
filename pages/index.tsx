@@ -36,8 +36,13 @@ export default function Home() {
     };
     
     try {
-      axios.request(options).then(p => 
+      axios.request(options).then((p: any) => {
+
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem('products', JSON.stringify(p));
+        }
         setProducts({products: p.data.data.search.products, loading: false})
+      }
       ).catch(err => {
         err.response.request.status ? toast.error('You need to purchase API key.', {
           position: 'top-right',
@@ -86,6 +91,7 @@ export default function Home() {
                   pathname: '/product-detail',
                   query: {tcin: p.tcin, store_id: store_id}
                 }}
+                target="_blank"
               >
                 <img src={ p.item.enrichment.images.primary_image_url } alt={p.item.product_vendors[0].vendor_name} />
                 <div>{p.item.product_vendors[0].vendor_name}</div>
