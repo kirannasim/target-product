@@ -6,13 +6,17 @@ import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
+interface ProductsState {
+  products: any[];
+  loading: boolean;
+}
 export default function Home() {
-  const [keyword, setKeyword] = useState('');
-  const [products, setProducts] = useState({
+  const [keyword, setKeyword] = useState<string>('');
+  const [products, setProducts] = useState<ProductsState>({
     products:[],
     loading: false
   });
-  const [store_id, setStore_id] = useState('3330')
+  const [store_id, setStore_id] = useState<string>('3330')
 
   const handleKeyword = (e: any) => {
     setKeyword(e.target.value);
@@ -20,6 +24,18 @@ export default function Home() {
   
   const getProduct = (e: Event) => {
     e.preventDefault();
+    if(keyword === "") {
+      toast.error('Keyword is required.', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
     setProducts({...products, loading: true});
     const options = {
       method: 'GET',
@@ -90,7 +106,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="container mx-auto">
         <form className="flex">
-          <input onChange={handleKeyword} value={keyword} className="px-3 mr-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" />
+          <input onChange={handleKeyword} value={keyword} placeholder="keyword" className="px-3 mr-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 disabled:shadow-none" />
           <button type="submit" className="px-4 py-2 font-semibold text-sm bg-cyan-500 text-white rounded-full shadow-sm" onClick={getProduct} >Search</button>
         </form>
         {products.loading &&
@@ -101,7 +117,7 @@ export default function Home() {
         {(products.products && products.products.length > 0) && 
         <>
           <h1 className="search-result">Search Result</h1>
-          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-10">
             {products.products.map((p: any, index: Number) => 
               <Link key={index} className="mb-3 card"
                 href={{
@@ -110,10 +126,10 @@ export default function Home() {
                 }}
                 target="_blank"
               >
-                <div className="overflow-hidden image-container">
+                <div className="overflow-hidden image-container flex justify-center">
                   <img src={ p.item.enrichment.images.primary_image_url } alt={p.item.product_vendors[0].vendor_name} />
                 </div>
-                <div className="p-3">
+                <div className="p-6">
                   <div className="product-name">{p.item.product_vendors[0].vendor_name}</div>
                   <div>{p.price.formatted_current_price}</div>
                 </div>

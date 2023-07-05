@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "react-toastify/dist/ReactToastify.css";
- interface Product {
+interface Product {
   tcin: string;
   item: {
     enrichment: {
@@ -25,9 +25,10 @@ import "react-toastify/dist/ReactToastify.css";
     formatted_current_price: string;
   };
 }
- export default function ProductDetail() {
+export default function ProductDetail() {
   const router = useRouter();
   const query = router.query;
+  const windowWidth = useRef<number>(0);
   const [products, setProducts] = useState<Product | undefined>();
    const responsive = {
     superLargeDesktop: {
@@ -48,6 +49,8 @@ import "react-toastify/dist/ReactToastify.css";
     },
   };
   useEffect(() => {
+    // console.log(window.innerWidth)
+    windowWidth.current = window.innerWidth;
     const fetchProduct = async () => {
       try {
         const products = localStorage?.getItem("products"); //filter((p) => p.tcin === query.tcin)[0];
@@ -67,7 +70,8 @@ import "react-toastify/dist/ReactToastify.css";
         <>
           {products.filter((p: Product) => p.tcin === query.tcin).map((product: Product, index: Number) => 
           <div key={index}>
-            {product.item.enrichment.images.alternate_image_urls.length > 2 ?
+            {(product.item.enrichment.images.alternate_image_urls.length > 2 
+            || (windowWidth.current < 768 && product.item.enrichment.images.alternate_image_urls.length > 1)) ?
             <Carousel
               swipeable={false}
               draggable={false}
