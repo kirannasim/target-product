@@ -87,10 +87,10 @@ import "react-toastify/dist/ReactToastify.css";
               )}
             </Carousel>
             :
-            <div className="flex justify-around">
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4">
               {product.item.enrichment.images.alternate_image_urls.map(
                 (p: string, index: number) => (
-                  <div key={index}>
+                  <div key={index} className="flex justify-center">
                     <img src={p} alt={product.item.product_vendors[0].vendor_name} />
                   </div>
                 )
