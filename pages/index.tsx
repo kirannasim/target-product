@@ -12,13 +12,14 @@ export default function Home() {
     products:[],
     loading: false
   });
-  const [store_id, setStore_id] = useState('1122')
+  const [store_id, setStore_id] = useState('3330')
 
   const handleKeyword = (e: any) => {
     setKeyword(e.target.value);
   }
   
-  const getProduct = () => {
+  const getProduct = (e: Event) => {
+    e.preventDefault();
     setProducts({...products, loading: true});
     const options = {
       method: 'GET',
