@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import axios from "axios";
 import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
@@ -69,6 +69,22 @@ export default function Home() {
       console.error(error);
     }
   }
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const products = localStorage?.getItem("products"); //filter((p) => p.tcin === query.tcin)[0];
+        if (products) {
+          const productData = await JSON.parse(products).data.data.search.products
+          setProducts({products: productData, loading: false});
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+     fetchProduct();
+  }, []);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="container mx-auto">
@@ -83,18 +99,23 @@ export default function Home() {
         }
         {(products.products && products.products.length > 0) && 
         <>
-          <h1>Search Result</h1>
+          <h1 className="search-result">Search Result</h1>
           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-4">
-            {products.products.map((p: any, index: number) => 
-              <Link key={index} className="mb-3"
+            {products.products.map((p: any, index: Number) => 
+              <Link key={index} className="mb-3 card"
                 href={{
                   pathname: '/product-detail',
                   query: {tcin: p.tcin, store_id: store_id}
                 }}
                 target="_blank"
               >
-                <img src={ p.item.enrichment.images.primary_image_url } alt={p.item.product_vendors[0].vendor_name} />
-                <div>{p.item.product_vendors[0].vendor_name}</div>
+                <div className="overflow-hidden image-container">
+                  <img src={ p.item.enrichment.images.primary_image_url } alt={p.item.product_vendors[0].vendor_name} />
+                </div>
+                <div className="p-3">
+                  <div className="product-name">{p.item.product_vendors[0].vendor_name}</div>
+                  <div>{p.price.formatted_current_price}</div>
+                </div>
               </Link>
             )}
           </div>

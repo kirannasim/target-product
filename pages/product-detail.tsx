@@ -47,10 +47,9 @@ import "react-toastify/dist/ReactToastify.css";
       items: 1,
     },
   };
-   useEffect(() => {
+  useEffect(() => {
     const fetchProduct = async () => {
       try {
-
         const products = localStorage?.getItem("products"); //filter((p) => p.tcin === query.tcin)[0];
         if (products) {
           const productData = await JSON.parse(products).data.data.search.products
@@ -62,12 +61,13 @@ import "react-toastify/dist/ReactToastify.css";
     };
      fetchProduct();
   }, []);
-   return (
-    <div className="container mx-auto">
+  return (
+    <div className="container mx-auto mt-10">
       {products !== undefined && products !== null && (
         <>
           {products.filter((p: Product) => p.tcin === query.tcin).map((product: Product, index: Number) => 
           <div key={index}>
+            {product.item.enrichment.images.alternate_image_urls.length > 2 ?
             <Carousel
               swipeable={false}
               draggable={false}
@@ -86,16 +86,23 @@ import "react-toastify/dist/ReactToastify.css";
                 )
               )}
             </Carousel>
-            <div className="info-title">Name</div>
-            <div>{product.item.product_vendors[0].vendor_name}</div>
-            <div className="info-title">Price</div>
-            <div>{product.price.formatted_current_price}</div>
-            <div className="info-title">Relationship Type</div>
-            <div>{product.item.relationship_type}</div>
-            <div className="info-title">Product Description</div>
-            <div>
+            :
+            <div className="flex justify-around">
+              {product.item.enrichment.images.alternate_image_urls.map(
+                (p: string, index: number) => (
+                  <div key={index}>
+                    <img src={p} alt={product.item.product_vendors[0].vendor_name} />
+                  </div>
+                )
+              )}
+            </div>
+            }
+            <div className="product-name mt-2">{product.item.product_vendors[0].vendor_name}</div>
+            <div className="price mt-4">{product.price.formatted_current_price}</div>
+            <div className="relationship-type mt-2">{product.item.relationship_type}</div>
+            <div className="description mt-3">
               {product.item.product_description.title}
-              <div>
+              <div className="mt-4">
                 {product.item.product_description.bullet_descriptions.map(
                   (p: string, index: number) => (
                     <div key={index}>
@@ -107,7 +114,7 @@ import "react-toastify/dist/ReactToastify.css";
             </div>
             <a
               href={product.item.enrichment.buy_url}
-              className="inline-block my-5 px-4 py-2 font-semibold text-sm bg-cyan-500 text-white rounded-full shadow-sm"
+              className="inline-block my-5 px-12 py-2 font-semibold text-sm bg-cyan-500 text-white rounded-full shadow-sm"
             >
               BUY
             </a>

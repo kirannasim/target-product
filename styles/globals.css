@@ -22,6 +22,27 @@
 div>a>img {
   width: 100%;
 }
+/* start home page */
+.image-container>img {
+  transition: all .3s;
+}
+.image-container:hover img {
+  transform: scale(1.2);
+}
+a.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+.search-result {
+  font-size: 20px;
+  margin-top: 20px;
+  font-weight: 900;
+}
+.product-name {
+  font-size: 18px;
+  font-weight: 700;
+}
+/* end home page */
+
 /* start product-detail */
 .detail-info {
   text-transform: capitalize;
@@ -29,5 +50,13 @@ div>a>img {
 .info-title {
   font-size: 20px;
   color: blue;
+}
+.price {
+  font-size: 18px;
+  font-weight: 600;
+  color: chocolate;
+}
+.relationship-type {
+  font-size: 16px;
 }
 /* end product-detail */
